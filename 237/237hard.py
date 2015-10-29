@@ -1,7 +1,7 @@
 import sys
 import time
 
-DEBUG_MODE = True
+DEBUG_MODE = False
 
 """
 Check file for validity.
@@ -177,8 +177,6 @@ def is_solved_puzzle(puzzle):
 Checks if the input puzzle is valid.
 If unsolved, returns False.
 Otherwise returns True.
-
-TODO: Add uniqueness check.
 """
 def is_valid_puzzle(puzzle):
 	dimension = len(puzzle)
@@ -191,6 +189,9 @@ def is_valid_puzzle(puzzle):
 
 	one_column_count = [0 for _ in range(dimension)]
 	zero_column_count = [0 for _ in range(dimension)]
+
+	rows = []
+	cols = []
 
 	# Check for max runs of 2 and row/col counts
 	for x in range(dimension):
@@ -212,14 +213,31 @@ def is_valid_puzzle(puzzle):
 					one_count > dimension/2 or zero_count > dimension/2):
 			return False
 
+		if one_count + zero_count == dimension:
+			rows.append("".join(map(str, puzzle[x])))
+
 	for index in range(dimension):
 		one_count = one_column_count[index]
 		zero_count = zero_column_count[index]
 		if (((one_count + zero_count == dimension) and (one_count != zero_count)) or
 					one_count > dimension/2 or zero_count > dimension/2):
 			return False
+		if one_count + zero_count == dimension:
+			cols.append("".join(map(str, [r[index] for r in puzzle])))
 
-	return True
+	if unique(rows) and unique(cols):
+		return True
+	else:
+		return False
+
+"""
+Check if all elements of a set are unique.
+
+Two line version from: http://stackoverflow.com/a/5281641
+"""
+def unique(elements):
+	seen = set()
+	return not any(i in seen or seen.add(i) for i in elements)
 
 """
 Checks empty space in puzzle, to see if it is surrounded by the same number.
