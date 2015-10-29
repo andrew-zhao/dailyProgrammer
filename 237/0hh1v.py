@@ -464,7 +464,7 @@ def main():
 	print "Puzzle read."
 
 	t = time.time()
-	result = solve_puzzle(puzzle, board_im.size[0], (x1, y1), 0.06)
+	result = solve_puzzle(puzzle, board_im.size[0], (x1, y1), 0.05)
 
 	print_puzzle(result)
 
